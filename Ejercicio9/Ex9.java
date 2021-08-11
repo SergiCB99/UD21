@@ -13,8 +13,10 @@ import javax.swing.*;
 
 public class Ex9 extends JFrame {
 	
+	//Array en el que guardaremos los botones pulsados
 	protected static JToggleButton[] cartas_giradas = new JToggleButton[2];
 	
+	//Booleano que nos ayudara a controlar que no se puedan clicar mas de dos botones
 	protected static boolean tirar = true;
 	
 	private JPanel contentPane;
@@ -117,12 +119,16 @@ public class Ex9 extends JFrame {
         TB16.setSelected(true);
         contentPane.add(TB16);
         
+        //Action listener asignado a cada boton
         ActionListener al1 = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
+				//Recoge que boton se ha clicado
 				JToggleButton source = (JToggleButton)e.getSource();
 					
+					//Si cumple esta condicion quiere decir que no hay dos botones clicados y podra clicar otro
 					if(tirar) {
+						//Dependiendo del boton le assignamos un color
 						if(source==TB1) {
 							TB1.setBackground((Color) colores.get(0));
 						}else if(source==TB2) {
@@ -157,6 +163,7 @@ public class Ex9 extends JFrame {
 							TB16.setBackground((Color) colores.get(15));
 						}
 					
+						//Guardamos los botones clicados
 						if(cartas_giradas[0]==null) {
 							cartas_giradas[0]=source;
 						}else {
@@ -164,10 +171,13 @@ public class Ex9 extends JFrame {
 							tirar=false;
 						}
 							
+						//Este if nos comprueba que ya haya 2 botones clicados
 						if(cartas_giradas[1]!=null) {
+							//Comprovamos que no se el mismo boton dos veces
 							if(cartas_giradas[0] != cartas_giradas[1]) {
 								comprovarColores();
 							}else {
+								//Si es el mismo boton giramos los botones, vaciamos el array y seteamos el booleano a true para poder seguir jugando
 								System.out.println("No puedes seleccionar la misma carta");
 								girarCartas();
 								resetearArray();
@@ -175,15 +185,21 @@ public class Ex9 extends JFrame {
 							}
 						}
 						
+					//Si el primer if no entrara entraria en este else
 					}else {
+						/*
+						 * Giramos "el tercer boton" y vaciamos el array con un timeout de 1300
+						 * para que le de tiempo a la funcion comprovarColores()
+						 */
 						source.setSelected(true);
 						System.out.println("Ya hay 2 cartas giradas");
-						setTimeout(()->resetearArray(), 1500);
+						setTimeout(()->resetearArray(), 1300);
 					}
 					
 			}
           };
           
+         //Asignamos el Action Listener a todos los botones
         TB1.addActionListener(al1);
         TB2.addActionListener(al1);
         TB3.addActionListener(al1);
@@ -203,24 +219,32 @@ public class Ex9 extends JFrame {
         
 	}
 	
+	//Funcion que comprueva el background de los botones
 	public static void comprovarColores() {
 		
-		
+		//Si entre en el if es que los backgrounds son iguales
 		if(cartas_giradas[0].getBackground()==cartas_giradas[1].getBackground()) {
+			//Descativamos los botones con un timeout para "hacerlo bonito"
 			setTimeout(()->desactivarCartas(), 1000);
 			System.out.println("Acierto");
+			//Vaciamos el array con un timeout mayor que el anterior porque sino podrias llenarlo y los botones aun no estarian desactivados
 			setTimeout(()->resetearArray(), 1100);
+			//Seteamos el booleano a true con un timeout mayor al anterior porque sino podrias tirar y el array aun estaria lleno
 			setTimeout(()->tirar=true, 1200);
+		//Si no tienen el mismo background
 		}else {
+			//Giramos los botones con un timeout para "hacerlo bonito"			
 			setTimeout(()->girarCartas(), 1000);
 			System.out.println("Fallo");
+			//Vaciamos el array con un timeout mayor que el anterior porque sino podrias llenarlo y los botones aun no estarian desactivados
 			setTimeout(()->resetearArray(), 1100);
+			//Seteamos el booleano a true con un timeout mayor al anterior porque sino podrias tirar y el array aun estaria lleno
 			setTimeout(()->tirar=true, 1200);
 		}
 		
-		
 	}
 	
+	//Funcion que desactiva los botones
 	public static void desactivarCartas() {
 
 		cartas_giradas[0].setVisible(false);
@@ -228,6 +252,7 @@ public class Ex9 extends JFrame {
 	
 	}
 	
+	//Funcion que gira los botones
 	public static void girarCartas() {
 
 		cartas_giradas[0].setSelected(true);
@@ -235,6 +260,7 @@ public class Ex9 extends JFrame {
 	
 	}
 	
+	//Funcion que vacia el array
 	public static void resetearArray() {
 
 		cartas_giradas[0]=null;
@@ -242,9 +268,12 @@ public class Ex9 extends JFrame {
 		
 	}
 	
-	//Funcion Copiada
+	/*
+	 * FUNCION COPIADA
+	 * Se que se puede hacer sin timeout pero para como ya has visto en otros comentarios
+	 * la he usado para "hacerlo bonito"
+	 */
 	public static void setTimeout(Runnable runnable, int delay){
-		//setTimeout(()->accion que quieras hacer, 1000);
 		
 		new Thread(() -> {
 	        try {
