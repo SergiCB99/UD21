@@ -6,8 +6,13 @@ import java.util.ArrayList;
 public class App {
   public static void main(String[] args) {
     
+	/*
+	 * Declaramos el arraylist que contendra todos los colores
+	 * Es arraylist para poder mezclarlo facilmente 
+	*/
     ArrayList<Color> colores = new ArrayList<>();
 	
+    //Añadimos 16 colores
 	colores.add(Color.red);
 	colores.add(Color.green);
 	colores.add(Color.blue);
